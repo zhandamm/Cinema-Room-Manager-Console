@@ -5,7 +5,8 @@ class Cinema(private val rows: Int, private val cols: Int) {
     private val seats: MutableList<MutableList<Char>> = MutableList(rows) { MutableList(cols) { 'S' } }
     private val seatsAmount = rows * cols
 
-    fun calcSeatCost(row: Int, col: Int) {
+
+    fun buySeat(row: Int, col: Int) {
 
         var allSeatsCost = 0
         val frontHalfOfSeats = (row / 2) * col
@@ -37,21 +38,51 @@ class Cinema(private val rows: Int, private val cols: Int) {
     }
 }
 
+//TODO ПЕРЕНЕСТИ ТО ЧТО НИЖЕ В ДРУГОЙ КЛАСС
+
+fun printMenu() {
+    println(
+        """1. Show the seats
+2. Buy a ticket
+0. Exit"""
+    )
+}
+
+fun chooseMenuOption(cinema: Cinema) {
+    while (true) {
+        when (readln().toInt()) {
+            1 -> cinema.printSeats()
+            2 -> {
+                println("Enter a row number:")
+                val selectRow = readln().toInt()
+                println("Enter a seat number in that row:")
+                val selectCol = readln().toInt()
+                cinema.buySeat(selectRow, selectCol)
+            }
+
+            0 -> break
+        }
+        printMenu()
+    }
+
+}
+
+fun displayMenuAndChooseOption(cinema: Cinema) {
+    printMenu()
+    chooseMenuOption(cinema)
+}
+
+
 fun main() {
+    val cinema = createCinema()
+    displayMenuAndChooseOption(cinema)
+}
+
+
+fun createCinema(): Cinema {
     println("Enter the number of rows:")
     val rows = readln().toInt()
     println("Enter the number of seats in each row:")
     val cols = readln().toInt()
-
-    val cinema = Cinema(rows, cols)
-    cinema.printSeats()
-    println("Enter a row number:")
-    val selectRow = readln().toInt()
-    println("Enter a seat number in that row:")
-    val selectCol = readln().toInt()
-
-    cinema.calcSeatCost(selectRow, selectCol)
-    cinema.printSeats()
+    return Cinema(rows, cols)
 }
-
-
